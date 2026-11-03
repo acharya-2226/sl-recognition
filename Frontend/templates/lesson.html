@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}{{ item.title }} · SignLearn{% endblock %}
+{% block content %}
+<div class="back-link"><a href="{% url 'category_detail' item.category_id %}">← Back to {{ item.category.name }}</a></div>
+
+<div class="page-head compact">
+  <div>
+    <span class="eyebrow">{{ item.category.get_track_display }} · learning</span>
+    <h1>Learn <em>{{ item.title }}</em></h1>
+    <p>Study the reference sign, then hold it in front of the camera until the recognizer confirms the matching output.</p>
+  </div>
+</div>
+
+<div class="lesson-layout verify-layout"
+     data-track="{{ item.category.track }}"
+     data-target="{{ item.title|escapejs }}"
+     data-item-url="{% url 'item_detail' item.id %}"
+     data-next-url="{% if next_item %}{% url 'item_detail' next_item.id %}{% else %}{% url 'category_detail' item.category_id %}{% endif %}">
+  <section class="card lesson-card-large reference-panel">
+    <span class="eyebrow">Reference sign</span>
+    <div class="lesson-visual">
+      {% if item.image %}
+      <img src="{{ item.image.url }}" alt="{{ item.title }} sign reference">
+      {% else %}
+      <span>{{ item.title }}</span>
+      {% endif %}
+    </div>
+    <h2>{{ item.title }}</h2>
+    <p>{{ item.description|default:'Study the hand shape, orientation, and position shown above.' }}</p>
+  </section>
+
+  <section class="card lesson-card-large camera-panel">
+    <span class="eyebrow">Live camera · {{ item.category.get_track_display }}</span>
+    <div class="camera-frame">
+      <video class="sign-camera" autoplay muted playsinline></video>
+      <div class="camera-placeholder">Camera preview will appear here.</div>
+    </div>
+    <div class="recognition-readout">
+      <span class="eyebrow">Recognizer output</span>
+      <strong class="prediction-label">Waiting for a hand…</strong>
+      <small class="prediction-confidence">Allow camera access to begin.</small>
+    </div>
+    <div class="verify-status" role="status">Show the sign from the reference panel.</div>
+    <button class="btn camera-start" type="button">Start camera</button>
+  </section>
+</div>
+
+<script src="{% static 'js/camera-verification.js' %}"></script>
+{% endblock %}

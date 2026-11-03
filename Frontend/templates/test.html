@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Test / Validate · SignLearn{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <span class="eyebrow">Test / Validate</span>
+    <h1>Show what you <em>know.</em></h1>
+    <p>Choose a category and identify each target character through live sign recognition. No reference images are shown during the test.</p>
+  </div>
+  <div class="orb">✓</div>
+</div>
+
+<div class="card test-list">
+  <span class="eyebrow">Available categories</span>
+  <h2>Start a blind validation cycle</h2>
+  <p class="test-intro">Every active sign appears once in a randomized order. Read the target character, perform its sign, and pass all targets to complete the cycle.</p>
+
+  {% for category in categories %}
+  <div class="test-row">
+    <span class="test-icon">✓</span>
+    <div>
+      <b>{{ category.get_track_display }} · {{ category.name }}</b>
+      <small>{{ category.items.all|length }} targets · random order · one cycle · no reference images</small>
+    </div>
+    <a class="btn small-btn" href="{% url 'test_category' category.id %}">Start blind test →</a>
+  </div>
+  {% empty %}
+  <div class="empty">No active categories are available yet. Add categories and signs from Django Admin.</div>
+  {% endfor %}
+</div>
+{% endblock %}

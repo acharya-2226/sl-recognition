@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}{{ category.name }} Test · SignLearn{% endblock %}
+{% block content %}
+<div class="back-link"><a href="{% url 'test_page' %}">← Back to tests</a></div>
+
+<div class="page-head compact">
+  <div>
+    <span class="eyebrow">{{ category.get_track_display }} · blind validation</span>
+    <h1>{{ category.name }} <em>test.</em></h1>
+    <p>No reference image is shown. Read the target character and perform its sign in front of the camera.</p>
+  </div>
+</div>
+
+<div class="card validation-cycle validation-cycle--camera-centered"
+     data-track="{{ category.track }}"
+     data-backend-asl="http://127.0.0.1:5001"
+     data-backend-nsl="http://127.0.0.1:5002"
+     data-backend-number="http://127.0.0.1:5003">
+
+  <div class="cycle-progress">
+    <span>Test progress</span>
+    <strong><span class="cycle-current">1</span> / {{ items|length }}</strong>
+    <div class="progress-track"><i class="cycle-progress-bar"></i></div>
+  </div>
+
+  <div class="lesson-layout verify-layout verify-layout--camera-centered">
+    <section class="card camera-stage">
+
+      <!-- Alphabet badge floats on the camera, not beside it -->
+      <div class="target-glyph cycle-visual">
+        <span class="eyebrow">Target</span>
+        <span class="cycle-title">{{ items.0.title }}</span>
+      </div>
+
+      <div class="camera-frame camera-frame--hero">
+        <video class="sign-camera" autoplay muted playsinline></video>
+        <div class="camera-placeholder">Camera preview will appear here.</div>
+        <div class="camera-frame-ring" aria-hidden="true"></div>
+      </div>
+
+      <div class="recognition-readout recognition-readout--inline">
+        <span class="eyebrow">Recognizer output</span>
+        <strong class="prediction-label">Waiting for a hand…</strong>
+        <small class="prediction-confidence">Start the camera to validate.</small>
+      </div>
+
+      <div class="verify-status" role="status">Show the sign for the target character.</div>
+
+      <button class="btn btn-lg camera-start" type="button">Start camera</button>
+    </section>
+  </div>
+
+  <div class="cycle-complete" hidden>
+    <span class="eyebrow">Validation complete</span>
+    <h2>Every target passed.</h2>
+    <p>You completed all {{ items|length }} signs in this blind test.</p>
+    <a class="btn" href="{% url 'test_page' %}">Back to categories</a>
+  </div>
+</div>
+
+<script type="application/json" id="cycle-items">[{% for item in items %}{"title":"{{ item.title|escapejs }}"}{% if not forloop.last %},{% endif %}{% endfor %}]</script>
+<script src="{% static 'js/camera-verification.js' %}"></script>
+{% endblock %}

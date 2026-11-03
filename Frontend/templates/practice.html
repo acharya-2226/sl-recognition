@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Practice · SignLearn{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <span class="eyebrow">Build confidence</span>
+    <h1>Practice makes it <em>yours.</em></h1>
+    <p>Answer five questions from the available Number, ASL, and NSL signs. Each question advances automatically.</p>
+  </div>
+</div>
+
+{% if not ready %}
+<div class="empty-state">
+  <span>◎</span>
+  <h2>Add at least five active signs to begin practice.</h2>
+  <p>The five-question round needs at least five active signs in the library.</p>
+  <a class="btn" href="{% url 'learn' %}">Go to learning →</a>
+</div>
+{% else %}
+<div class="practice-layout practice-round">
+  <div class="practice-card">
+    <div class="split practice-header">
+      <span class="pill">◎ Practice round</span>
+      <b>Question <span id="question-number">1</span> <small>/ 5</small></b>
+    </div>
+
+    <div class="question-art">
+      {% if first_question.image %}
+      <img id="question-image" src="{{ first_question.image }}" alt="Sign prompt">
+      <span id="question-symbol" hidden></span>
+      {% else %}
+      <img id="question-image" src="" alt="Sign prompt" hidden>
+      <span id="question-symbol">✋</span>
+      {% endif %}
+    </div>
+
+    <span class="eyebrow">Which sign is this?</span>
+    <h2>Look closely, then choose.</h2>
+    <div id="choices" class="choices">
+      {% for choice in first_question.choices %}
+      <button type="button" class="choice" data-choice-id="{{ choice.id }}">
+        <b>{{ choice.title|slice:':1' }}</b>{{ choice.title }}
+      </button>
+      {% endfor %}
+    </div>
+    <div id="feedback" class="feedback" role="status" aria-live="polite"></div>
+    <div id="score-display" class="round-score">Score: 0 / 5</div>
+  </div>
+
+  <aside class="study-note">
+    <span class="eyebrow">Practice rule</span>
+    <h2>Choose, learn, continue.</h2>
+    <p>Correct answers add one mark. Wrong answers show the correct sign before the next question appears.</p>
+  </aside>
+</div>
+
+<div id="practice-result" class="practice-result" hidden>
+  <span class="eyebrow">Round complete</span>
+  <h2>You scored <strong id="final-score">0 / 5</strong></h2>
+  <p>Good work. Start another round to practise a new set of signs.</p>
+  <a class="btn" href="{% url 'practice' %}">Try another round →</a>
+</div>
+
+{{ round_data|json_script:"practice-round-data" }}
+{% endif %}
+{% endblock %}

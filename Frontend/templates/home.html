@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block title %}Home · SignLearn{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <span class="eyebrow">Sign language learning</span>
+    <h1>Keep your hands moving <em>forward.</em></h1>
+    <p>Explore signs, study the reference image, and practise with live camera recognition.</p>
+  </div>
+  <div class="orb">✦</div>
+</div>
+
+<section class="home-grid">
+  <div class="hero card-pattern">
+    <div>
+      <span class="pill">Learn through practice</span>
+      <h2>Your next sign is waiting.</h2>
+      <p>Choose a track and begin exploring signs with guided references and live recognition.</p>
+      <a class="btn" href="{% url 'learn' %}">Explore lessons →</a>
+    </div>
+    <div class="hero-art"><span>✋</span><i></i></div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="split section-title">
+    <div>
+      <span class="eyebrow">Explore</span>
+      <h2>Choose a learning track</h2>
+    </div>
+    <a href="{% url 'learn' %}" class="text-link">View all lessons →</a>
+  </div>
+  <div class="track-grid">
+    {% for code, label in tracks %}
+    <a class="track-card" href="{% url 'learn' %}#{{ code }}">
+      <span class="track-mark">{% if code == 'NUM' %}01{% else %}{{ code }}{% endif %}</span>
+      <span><b>{{ label }}</b><small>Explore {{ label|lower }} signs</small></span>
+      <strong>→</strong>
+    </a>
+    {% endfor %}
+  </div>
+</section>
+
+<div class="quote">
+  <span>“</span>
+  <p>Every gesture is a conversation waiting to happen.</p>
+  <small>— Your SignLearn note</small>
+</div>
+{% endblock %}

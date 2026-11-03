@@ -1,0 +1,31 @@
+# Backend
+backend/env/
+backend/.env
+backend/__pycache__/
+backend/*.py[cod]
+
+# Frontend
+frontend/node_modules/
+frontend/build/
+frontend/.env
+frontend/env
+
+# Environment files
+.env
+.env.*
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# archives, backups, media, caches
+*.zip
+*.backup
+*_backup.txt
+*.mp4
+__pycache__/
+*.pyc

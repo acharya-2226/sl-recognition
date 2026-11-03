@@ -1,0 +1,51 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}SignLearn{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+<div class="mobile-bar">
+  <button class="icon-btn" id="navToggle" aria-label="Open navigation">☰</button>
+  <a class="mobile-brand" href="{% url 'home' %}"><span class="mark">✋</span> Sign<span>Learn</span></a>
+</div>
+
+<div class="app-shell">
+  <aside class="sidebar" id="sidebar">
+    <a class="brand" href="{% url 'home' %}">
+      <span class="mark">✋</span>
+      <span><strong>Sign<span>Learn</span></strong><small>Learn with your hands</small></span>
+    </a>
+
+    <div class="nav-label">Explore</div>
+    <nav class="side-nav">
+      <a href="{% url 'home' %}" class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}"><span>⌂</span> Home</a>
+      <a href="{% url 'learn' %}" class="{% if request.resolver_match.url_name in 'learn category_detail item_detail' %}active{% endif %}"><span>▤</span> Learn</a>
+      <a href="{% url 'practice' %}" class="{% if request.resolver_match.url_name == 'practice' %}active{% endif %}"><span>◎</span> Practice</a>
+      <a href="{% url 'test_page' %}" class="{% if request.resolver_match.url_name in 'test_page test_category' %}active{% endif %}"><span>✓</span> Test / Validate</a>
+      <a href="{% url 'tts' %}" class="{% if request.resolver_match.url_name == 'tts' %}active{% endif %}"><span>🔊</span> TTS Recognition</a>
+    </nav>
+
+    <div class="sidebar-tip">
+      <strong>✦ Learn by doing</strong>
+      <small>Practice with live sign recognition.</small>
+    </div>
+  </aside>
+
+  <main class="content">
+    <header class="topline">
+      <span>SignLearn <i>/</i> <em>Practice with live recognition</em></span>
+    </header>
+    {% block content %}{% endblock %}
+  </main>
+</div>
+
+<script src="{% static 'js/main.js' %}"></script>
+</body>
+</html>

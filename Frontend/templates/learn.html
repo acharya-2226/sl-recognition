@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block title %}Learn · SignLearn{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <span class="eyebrow">The library</span>
+    <h1>Learn at your own <em>rhythm.</em></h1>
+    <p>Choose a track, explore one sign at a time, and practise with the live camera whenever you are ready.</p>
+  </div>
+  <div class="orb">✦</div>
+</div>
+
+<div class="track-tabs">
+  {% for code, data in tracks.items %}
+  <a href="#{{ code }}" class="track-tab">
+    <span>{{ data.label|slice:':2' }}</span>
+    <b>{{ data.label }}</b>
+    <small>{{ data.categories|length }} sections</small>
+  </a>
+  {% endfor %}
+</div>
+
+{% for code, data in tracks.items %}
+<section id="{{ code }}" class="library-section">
+  <div class="split section-title">
+    <div>
+      <span class="eyebrow">{{ data.label }} track</span>
+      <h2>Build your foundation</h2>
+    </div>
+    <span class="count">{{ data.categories|length }} sections</span>
+  </div>
+
+  {% for category in data.categories %}
+  <div class="category-panel">
+    <div>
+      <span class="eyebrow">{{ data.label }} · sequence {{ category.order|add:'1' }}</span>
+      <h3>{{ category.name }}</h3>
+      <p>{{ category.active_items|length }} signs available</p>
+    </div>
+    <a class="btn small-btn" href="{% url 'category_detail' category.id %}">Open sequence →</a>
+  </div>
+  {% empty %}
+  <div class="empty">No active lessons in this track yet. Add them from Django Admin.</div>
+  {% endfor %}
+</section>
+{% endfor %}
+{% endblock %}

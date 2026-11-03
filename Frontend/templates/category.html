@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}{{ category.name }} · SignLearn{% endblock %}
+{% block content %}
+<div class="back-link"><a href="{% url 'learn' %}">← Back to library</a></div>
+
+<div class="page-head compact">
+  <div>
+    <span class="eyebrow">{{ category.get_track_display }} · sequence</span>
+    <h1>{{ category.name|default:'Start with the basics' }}</h1>
+    <p>Explore the signs in this category, study each reference, and practise with the live camera.</p>
+  </div>
+</div>
+
+<div class="sequence-panel">
+  {% for item in items %}
+  <div class="sequence-row">
+    <span class="node">{{ forloop.counter|stringformat:'02d' }}</span>
+    <div class="sequence-copy">
+      <span class="eyebrow">Sign {{ forloop.counter|stringformat:'02d' }}</span>
+      <h2>{{ item.title }}</h2>
+      <p>{{ item.description|default:'A steady, simple introduction.' }}</p>
+    </div>
+    <a class="text-link" href="{% url 'item_detail' item.id %}">Learn now →</a>
+  </div>
+  {% empty %}
+  <div class="empty">No active items yet. Add learning components from Django Admin.</div>
+  {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}TTS Recognition · SignLearn{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <span class="eyebrow">Live recognition</span>
+    <h1>Turn signs into <em>speech.</em></h1>
+    <p>Hold one sign steadily for one second to add it to the text buffer. Speech is generated locally by your browser.</p>
+  </div>
+  <div class="orb">🔊</div>
+</div>
+
+<div class="card tts-page"
+     data-initial-track="{% if tracks %}{{ tracks.0.code }}{% endif %}"
+     data-backend-asl="http://127.0.0.1:5001"
+     data-backend-nsl="http://127.0.0.1:5002"
+     data-backend-num="http://127.0.0.1:5003">
+  <div class="tts-track-switcher" role="tablist" aria-label="Recognition track">
+    {% for track in tracks %}
+    <button class="tts-track-button{% if forloop.first %} active{% endif %}"
+            type="button"
+            role="tab"
+            aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+            data-track="{{ track.code }}">{{ track.label }}</button>
+    {% empty %}
+    <p class="empty">No recognition tracks are enabled. Enable ASL, NSL, or Number for TTS in Django Admin.</p>
+    {% endfor %}
+  </div>
+
+  {% if tracks %}
+  <div class="tts-layout">
+    <section class="tts-camera-panel">
+      <span class="eyebrow">Live camera</span>
+      <div class="camera-frame tts-camera-frame">
+        <video class="tts-camera" autoplay muted playsinline></video>
+        <div class="camera-placeholder tts-camera-placeholder">Camera preview will appear here.</div>
+      </div>
+      <button class="btn tts-camera-start" type="button">Start camera</button>
+      <div class="tts-status" role="status">Choose a track and start the camera.</div>
+    </section>
+
+    <aside class="tts-output-panel">
+      <span class="eyebrow">Recognition output</span>
+      <div class="tts-detected-box">
+        <small>Current sign</small>
+        <strong id="tts-detected">Waiting for a hand…</strong>
+        <span id="tts-confidence">No prediction yet.</span>
+      </div>
+
+      <div class="tts-hold-box">
+        <div class="split"><small>Hold progress</small><small id="tts-hold-label">0%</small></div>
+        <div class="tts-hold-track"><span id="tts-hold-bar"></span></div>
+      </div>
+
+      <label class="eyebrow" for="tts-buffer">Text buffer</label>
+      <textarea id="tts-buffer" class="tts-buffer" rows="5" readonly placeholder="Committed signs will appear here"></textarea>
+      <div class="tts-controls">
+        <button class="btn small-btn" id="tts-play" type="button">Play buffer</button>
+        <button class="btn secondary small-btn" id="tts-pause" type="button">Pause</button>
+        <button class="btn secondary small-btn" id="tts-space" type="button">Space</button>
+        <button class="btn secondary small-btn" id="tts-delete" type="button">Delete</button>
+        <button class="btn secondary small-btn" id="tts-clear" type="button">Clear</button>
+      </div>
+      <p class="tts-note">Each held sign is spoken once when committed. This gives immediate feedback without guessing where a word begins or ends.</p>
+    </aside>
+  </div>
+  {% endif %}
+</div>
+
+<script src="{% static 'js/tts.js' %}"></script>
+{% endblock %}
